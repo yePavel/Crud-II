@@ -9,7 +9,7 @@ function onInit() {
 function render() {
     const elBooksTable = document.querySelector('table > tbody')
     const books = getBooks(gFilterBy)
-    const emptyTable = `<tr><td>No matching books were found</td></tr>`
+    const emptyTable = `<tr><td colspan="3">No matching books were found</td></tr>`
     const strHtmls = books.map(book =>
         `<tr>
             <td>${book.title}</td>
@@ -85,7 +85,7 @@ function onBookFilter() {
 function onClearFilter() {
     const elSearch = document.querySelector('.menu input')
     elSearch.value = gFilterBy = ''
-    
+
     render()
 }
 
@@ -111,9 +111,8 @@ function renderStats() {
     const elCheap = document.querySelector('.cheap-books')
     const elAvg = document.querySelector('.avg-books')
 
-    elTotal.innerHTML = getTotalBooks()
-    elExpens.innerHTML = getExpensBooks()
-    elCheap.innerHTML = getCheapBooks()
-    elAvg.innerHTML = getAvgBooks()
-
+    elTotal.innerText = getTotalBooks()
+    elExpens.innerText = getExpensBooks()
+    elCheap.innerText = getCheapBooks()
+    elAvg.innerText = getAvgBooks()
 }

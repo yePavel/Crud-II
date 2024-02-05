@@ -6,7 +6,7 @@ _createBooks()
 
 function getBooks(filterBy) {
     if (!filterBy) return gBooks
-    var filterdBooks = gBooks.filter(book => book.title.includes(filterBy))
+    var filterdBooks = gBooks.filter(book => book.title.toLowerCase().includes(filterBy.toLowerCase()))
     return filterdBooks
 }
 
@@ -66,11 +66,25 @@ function getTotalBooks() {
     return gBooks.length
 }
 function getExpensBooks() {
-    return gBooks.filter(books => books.price > 200).length
+    return gBooks.filter(book => book.price >= 200).length
 }
 function getCheapBooks() {
-    return gBooks.filter(books => books.price < 80).length
+    return gBooks.filter(book => book.price <= 80).length
 }
 function getAvgBooks() {
-    return gBooks.filter(books => books.price > 80 && books.price < 200).length
+    return gBooks.filter(book => book.price > 80 && book.price < 200).length
+}
+
+function getStats() {
+    const stats = gBooks.reduce((acc, book) => {
+        acc.total++
+        if(book.price >= 200) acc.expensive++
+        if(book.price <= 80) acc.cheap++
+        if(book.price > 80 && book.price < 200) acc.avg++
+
+        return acc
+    }, { cheap: 0, avg: 0, expensive: 0, total: 0 })
+
+    console.log('stats: ', stats)
+    return stats
 }
