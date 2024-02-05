@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/books.css">
+    <title>Books Shop</title>
+</head>
+
+<body onload="onInit()">
+    <h1>Books Shop</h1>
+
+    <div class="menu">
+        <input oninput="onBookFilter()" type="search" placeholder="Search.." class="search">
+        <button onclick="onClearFilter()">x</button>
+        <button class="addBook" onclick="onAddBook()">Add book <img class="logo" src="/pic/addBook.jpg.png"></button>
+    </div>
+
+    <div class="alert-msg"></div>
+
+    <table class="books-container">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <dialog class="book-details">
+        <form method="dialog">
+            <h2>Title: <span></span></h2>
+            <pre></pre>
+            <div>
+                <img src="" alt="">
+            </div>
+            <button class="close-details">X</button>
+        </form>
+    </dialog>
+
+    <footer>
+        <span>Total books:</span>
+        <span class="total-books"></span>
+        <span>Expensive books:</span>
+        <span class="expensive-books"></span>
+        <span>Cheap books:</span>
+        <span class="cheap-books"></span>
+        <span>Average:</span>
+        <span class="avg-books"></span>
+    </footer>
+
+    <script src="js/services/util.service.js"></script>
+    <script src="js/services/storage.service.js"></script>
+    <script src="js/services/book.service.js"></script>
+    <script src="js/book.controller.js"></script>
+
+</body>
+
+</html>
