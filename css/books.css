@@ -33,7 +33,7 @@ form {
     margin: 20px 0;
 }
 
-.search-by {
+fieldset {
     display: flex;
     justify-content: space-between;
 }
@@ -43,6 +43,7 @@ form {
     border: 1px solid black;
     font-size: 17px;
 }
+
 
 table {
     align-self: center;

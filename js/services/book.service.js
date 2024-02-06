@@ -6,8 +6,19 @@ _createBooks()
 
 function getBooks(options = {}) {
     if (!options.filterBy) return gBooks
-
     var books = _filterBooks(options.filterBy)
+
+    if (options.sortBy === 'title') {
+        books.sort((book1, book2) => book1.title.localeCompare(book2.title))
+    }
+
+    else if (options.sortBy === 'price') {
+        books.sort((book1, book2) => book1.price - book2.price)
+    }
+
+    else if (options.sortBy === 'rating') {
+        books.sort((book1, book2) => book1.rate - book2.rate)
+    }
 
     return books
 }
@@ -50,7 +61,7 @@ function getStats() {
     return stats
 }
 
-// private func
+// private func ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function _createBooks() {
     gBooks = loadFromStorage(STORAGE_KEY)

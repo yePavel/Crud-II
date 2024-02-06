@@ -4,6 +4,7 @@
 
 const gQueryOptions = {
     filterBy: { txt: '', minRate: '' },
+    sortBy: {}
 }
 
 function onInit() {
@@ -86,12 +87,25 @@ function onBookFilter() {
     render()
 }
 
-function onClearFilter() {
-    const elSearch = document.querySelector('.menu input')
-    elSearch.value = gQueryOptions.searchBy.txt = ''
+function onSetSortBy() {
+    const elSortBy = document.querySelector('.sort')
+
+    gQueryOptions.sortBy = elSortBy.value
 
     render()
 }
+
+// function onClearFilter() {
+//     const elSearch = document.querySelector('.search-by > input')
+//     const elSortByRate = document.querySelector('.search-by >.rating')
+//     console.log('elSearch:', elSearch)
+//     console.log('elSortByRate:', elSortByRate)
+
+//     gQueryOptions.filterBy.txt = elSearch.innerText = ''
+//     gQueryOptions.filterBy.minRate = elSortByRate.innerText = ''
+
+//     render()
+// }
 
 function userMsg(msg, mode) {
     const elMsg = document.querySelector('.alert-msg')
