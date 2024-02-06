@@ -6,26 +6,27 @@ _createBooks()
 
 function getBooks(options = {}) {
     if (!options.filterBy) return gBooks
-    var books = _filterBooks(options.filterBy)
-
-    console.log('options.sortBy:', options.sortBy)
+    var books = _searchBooks(options.filterBy)
 
     if (options.sortBy.title) {
-        console.log(':',)
         books.sort((book1, book2) => book1.title.localeCompare(book2.title) * options.sortBy.title)
     }
-
     else if (options.sortBy.price) {
         console.log('options.sortBy.price:', options.sortBy.price)
         books.sort((book1, book2) => (book1.price - book2.price) * options.sortBy.price)
     }
-
     else if (options.sortBy.rating) {
         books.sort((book1, book2) => (book1.rate - book2.rate) * options.sortBy.rating)
     }
 
+    if (options.page) {
+        const startIdx = options.page.idx * options.page.size
+        books = books.splice(startIdx, startIdx + options.page.size)
+    }
+
     return books
 }
+
 
 function removeBook(bookId) {
     const idx = gBooks.findIndex(books => books.id === bookId)
@@ -95,10 +96,14 @@ function _saveBooks() {
     saveToStorage(STORAGE_KEY, gBooks)
 }
 
-function _filterBooks(filterBy) {
-
+function _searchBooks(filterBy) {
     const filterdBooks = gBooks.filter(book => book.title.toLowerCase().includes(filterBy.txt.toLowerCase()) &&
         book.rate >= filterBy.minRate)
 
     return filterdBooks
 }
+
+function _getBooksCount(filterBy) {
+    return _searchBooks(filterBy).length
+}
+

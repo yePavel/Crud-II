@@ -13,7 +13,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
 
-    min-width: 850px;
+    min-width: 950px;
     height: 100vh;
 }
 
@@ -187,6 +187,14 @@ dialog form {
 .warning-msg {
     color: #9F6000;
     background-color: #FEEFB3;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    margin-top: 90px;
 }
 
 footer {

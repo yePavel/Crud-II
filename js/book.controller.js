@@ -2,7 +2,8 @@
 
 const gQueryOptions = {
     filterBy: { txt: '', minRate: '' },
-    sortBy: {}
+    sortBy: {},
+    page: { idx: 0, size: 4 }
 }
 
 function onInit() {
@@ -141,3 +142,20 @@ function renderStats() {
     elAvg.innerText = stats.avg
 }
 
+function onNextPage() {
+    const bookCount = _getBooksCount(gQueryOptions.filterBy)
+    if (bookCount > (gQueryOptions.page.idx + 1) * gQueryOptions.page.size)
+        gQueryOptions.page.idx++
+    else gQueryOptions.page.idx = 0
+    render()
+}
+
+function onPrevPage() {
+    const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
+    const lastPage = Math.ceil(bookCount) - 1
+
+    if (gQueryOptions.page.idx === 0)
+        gQueryOptions.page.idx = lastPage
+    else gQueryOptions.page.idx--
+    render()
+}
