@@ -1,6 +1,10 @@
 'use strict'
 
-var gFilterBy = ''
+// var gFilterBy = ''
+
+const gQueryOptions = {
+    filterBy: { txt: '', minRate: '' },
+}
 
 function onInit() {
     render()
@@ -8,8 +12,8 @@ function onInit() {
 
 function render() {
     const elBooksTable = document.querySelector('table > tbody')
-    const books = getBooks(gFilterBy)
-    const emptyTable = `<tr><td colspan="3">No matching books were found</td></tr>`
+    const books = getBooks(gQueryOptions)
+    const emptyTable = `<tr><td colspan="4">No matching books were found</td></tr>`
     const strHtmls = books.map(book =>
         `<tr>
             <td>${book.title}</td>
@@ -73,15 +77,18 @@ function onBookDetails(bookId) {
 }
 
 function onBookFilter() {
-    const input = document.querySelector('input')
-    gFilterBy = input.value
+    const input = document.querySelector('fieldset input')
+    const elSortByRate = document.querySelector('.rating')
+
+    gQueryOptions.filterBy.txt = input.value
+    gQueryOptions.filterBy.minRate = elSortByRate.value
 
     render()
 }
 
 function onClearFilter() {
     const elSearch = document.querySelector('.menu input')
-    elSearch.value = gFilterBy = ''
+    elSearch.value = gQueryOptions.searchBy.txt = ''
 
     render()
 }
@@ -114,3 +121,4 @@ function renderStats() {
     elCheap.innerText = stats.cheap
     elAvg.innerText = stats.avg
 }
+

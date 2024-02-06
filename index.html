@@ -11,14 +11,27 @@
 <body onload="onInit()">
     <h1>Books Shop📖</h1>
 
-    <div class="menu">
-        <input oninput="onBookFilter()" type="search" placeholder="Search.." class="search">
-        <button onclick="onClearFilter()">x</button>
-        <button class="addBook" onclick="onAddBook()">Add book <img class="logo" src="/pic/addBook.jpg.png"></button>
-    </div>
+    <section class="books-filter">
+        <fieldset>
+            <legend>Filter & Sorting</legend>
+
+            <div class="search-by">
+                <input oninput="onBookFilter()" type="search" placeholder="Search.." class="search">
+                <select class="rating" onchange="onBookFilter()">
+                    <option value="">Select book rate</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+        </fieldset>
+    </section>
 
     <div class="alert-msg"></div>
-
+    <button class="addBook" onclick="onAddBook()">Add book <img class="logo" src="/pic/addBook.jpg.png"></button>
     <table class="books-container">
         <thead>
             <tr>
