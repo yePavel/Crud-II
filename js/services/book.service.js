@@ -8,16 +8,20 @@ function getBooks(options = {}) {
     if (!options.filterBy) return gBooks
     var books = _filterBooks(options.filterBy)
 
-    if (options.sortBy === 'title') {
-        books.sort((book1, book2) => book1.title.localeCompare(book2.title))
+    console.log('options.sortBy:', options.sortBy)
+
+    if (options.sortBy.title) {
+        console.log(':',)
+        books.sort((book1, book2) => book1.title.localeCompare(book2.title) * options.sortBy.title)
     }
 
-    else if (options.sortBy === 'price') {
-        books.sort((book1, book2) => book1.price - book2.price)
+    else if (options.sortBy.price) {
+        console.log('options.sortBy.price:', options.sortBy.price)
+        books.sort((book1, book2) => (book1.price - book2.price) * options.sortBy.price)
     }
 
-    else if (options.sortBy === 'rating') {
-        books.sort((book1, book2) => book1.rate - book2.rate)
+    else if (options.sortBy.rating) {
+        books.sort((book1, book2) => (book1.rate - book2.rate) * options.sortBy.rating)
     }
 
     return books

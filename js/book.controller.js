@@ -1,7 +1,5 @@
 'use strict'
 
-// var gFilterBy = ''
-
 const gQueryOptions = {
     filterBy: { txt: '', minRate: '' },
     sortBy: {}
@@ -89,8 +87,15 @@ function onBookFilter() {
 
 function onSetSortBy() {
     const elSortBy = document.querySelector('.sort')
+    const elDesc = document.querySelector('.sort-desc')
+    const elAsce = document.querySelector('.sort-asce')
+    const sortByCategory = elSortBy.value
+    var dir = 1
 
-    gQueryOptions.sortBy = elSortBy.value
+    if (elDesc.checked) dir = -1
+    else if (elAsce.checked) dir = 1
+
+    gQueryOptions.sortBy = { [sortByCategory]: dir }
 
     render()
 }
