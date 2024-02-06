@@ -13,6 +13,7 @@ function render() {
     const strHtmls = books.map(book =>
         `<tr>
             <td>${book.title}</td>
+            <td>${book.rate}</td>
             <td class="price">${book.price}</td>
             <td class="btn-container">
                 <button onclick="onBookDetails('${book.id}')">Details <img class="logo" src="/pic/info.png"></button>
@@ -34,8 +35,8 @@ function onRemoveBook(bookId) {
 
 function onUpdateBook(bookId) {
     const price = +prompt('Enter your new book price: ')
-    if(!price) return
-    
+    if (!price) return
+
     updatePrice(bookId, price)
     userMsg('The book has been updated', 'add')
     render()
@@ -63,15 +64,11 @@ function onBookDetails(bookId) {
     const elImg = elModal.querySelector('div img')
     const elTitle = elModal.querySelector('h2 span')
 
-    pre.innerHTML = JSON.stringify(book, null, 3)
+    pre.innerHTML = JSON.stringify(book, null, 4)
     elTitle.innerText = book.title
-    // const bookStr = `Book name: ${book.title} 
-    // Price: ${book.price} 
-    // Book summary: Quo vel architecto 
-    // totam repudiandae perferendis!`
 
     elImg.src = `pic/${book.title}.jpg`
-    // pre.innerHTML = bookStr
+
     elModal.showModal()
 }
 
@@ -91,7 +88,7 @@ function onClearFilter() {
 
 function userMsg(msg, mode) {
     const elMsg = document.querySelector('.alert-msg')
-    
+
     elMsg.innerText = msg
     elMsg.classList.remove('hidden')
 
@@ -110,9 +107,10 @@ function renderStats() {
     const elExpens = document.querySelector('.expensive-books')
     const elCheap = document.querySelector('.cheap-books')
     const elAvg = document.querySelector('.avg-books')
+    const stats = getStats()
 
-    elTotal.innerText = getTotalBooks()
-    elExpens.innerText = getExpensBooks()
-    elCheap.innerText = getCheapBooks()
-    elAvg.innerText = getAvgBooks()
+    elTotal.innerText = stats.total
+    elExpens.innerText = stats.expensive
+    elCheap.innerText = stats.cheap
+    elAvg.innerText = stats.avg
 }

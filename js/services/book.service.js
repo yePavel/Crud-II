@@ -50,11 +50,14 @@ function _createBooks() {
 }
 
 function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
+    const rate = getRandomInt(1, 5)
+    console.log('rate:', rate)
     return {
         id: makeId(),
         title,
         price,
         imgUrl,
+        rate,
     }
 }
 
@@ -62,29 +65,15 @@ function _saveBooks() {
     saveToStorage('booksDB', gBooks)
 }
 
-function getTotalBooks() {
-    return gBooks.length
-}
-function getExpensBooks() {
-    return gBooks.filter(book => book.price >= 200).length
-}
-function getCheapBooks() {
-    return gBooks.filter(book => book.price <= 80).length
-}
-function getAvgBooks() {
-    return gBooks.filter(book => book.price > 80 && book.price < 200).length
-}
-
 function getStats() {
     const stats = gBooks.reduce((acc, book) => {
         acc.total++
-        if(book.price >= 200) acc.expensive++
-        if(book.price <= 80) acc.cheap++
-        if(book.price > 80 && book.price < 200) acc.avg++
+        if (book.price >= 200) acc.expensive++
+        if (book.price <= 80) acc.cheap++
+        if (book.price > 80 && book.price < 200) acc.avg++
 
         return acc
     }, { cheap: 0, avg: 0, expensive: 0, total: 0 })
 
-    console.log('stats: ', stats)
     return stats
 }
