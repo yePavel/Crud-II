@@ -3,7 +3,7 @@
 const gQueryOptions = {
     filterBy: { txt: '', minRate: '' },
     sortBy: {},
-    page: { idx: 0, size: 4 }
+    page: { idx: 0, size: 5 }
 }
 
 function onInit() {
@@ -42,22 +42,28 @@ function onUpdateBook(bookId) {
     if (!price) return
 
     updatePrice(bookId, price)
-    userMsg('The book has been updated', 'add')
+
+    userMsg('The book price has been updated', 'add')
     render()
 }
 
-function onAddBook() {
-    const bookName = prompt('Enter your book name: ')
-    const newBookPrice = +prompt('Enter your book price: ')
+function onShowAddBook() {
+    const elModal = document.querySelector('.book-edit')
+    elModal.showModal()
+}
 
-    if (typeof bookName === 'string' && bookName.length > 0 && !isNaN(newBookPrice) && newBookPrice >= 0) {
-        addBook(bookName, newBookPrice)
-        render()
-        userMsg('The book has been successfully added', 'add')
-    }
-    else {
-        alert('Error! Book name or price incorrect')
-    }
+function onAddBook() {
+    const elName = document.querySelector('.new-name')
+    const elPrice = document.querySelector('.new-price')
+    const elModal = document.querySelector('.book-edit')
+
+    if (!elName.value || !elPrice.value) return
+    addBook(elName.value, elPrice.value)
+
+    elName.value = ''
+    elPrice.value = ''
+
+    render()
 }
 
 function onBookDetails(bookId) {
@@ -88,30 +94,28 @@ function onBookFilter() {
 
 function onSetSortBy() {
     const elSortBy = document.querySelector('.sort')
-    const elDesc = document.querySelector('.sort-desc')
-    const elAsce = document.querySelector('.sort-asce')
+    const elDir = document.querySelector(`[name="sort_dir"]:checked`)
     const sortByCategory = elSortBy.value
-    var dir = 1
 
-    if (elDesc.checked) dir = -1
-    else if (elAsce.checked) dir = 1
-
-    gQueryOptions.sortBy = { [sortByCategory]: dir }
+    gQueryOptions.sortBy = { [sortByCategory]: elDir.value }
+    gQueryOptions.page.idx = 0
 
     render()
 }
 
-// function onClearFilter() {
-//     const elSearch = document.querySelector('.search-by > input')
-//     const elSortByRate = document.querySelector('.search-by >.rating')
-//     console.log('elSearch:', elSearch)
-//     console.log('elSortByRate:', elSortByRate)
+function onClearFilter() {
+    document.querySelector('.search-by input').value = ''
+    document.querySelector('.search-by .rating').value = ''
 
-//     gQueryOptions.filterBy.txt = elSearch.innerText = ''
-//     gQueryOptions.filterBy.minRate = elSortByRate.innerText = ''
+    gQueryOptions.filterBy.txt = ''
+    gQueryOptions.filterBy.minRate = ""
 
-//     render()
-// }
+    render()
+}
+
+function onCloseModal() {
+    document.querySelector('.book-edit').close()
+}
 
 function userMsg(msg, mode) {
     const elMsg = document.querySelector('.alert-msg')

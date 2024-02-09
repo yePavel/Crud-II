@@ -12,7 +12,6 @@ function getBooks(options = {}) {
         books.sort((book1, book2) => book1.title.localeCompare(book2.title) * options.sortBy.title)
     }
     else if (options.sortBy.price) {
-        console.log('options.sortBy.price:', options.sortBy.price)
         books.sort((book1, book2) => (book1.price - book2.price) * options.sortBy.price)
     }
     else if (options.sortBy.rating) {
@@ -44,7 +43,6 @@ function updatePrice(bookId, price) {
 
 function addBook(name, price) {
     gBooks.unshift(_createBook(name, price))
-
     _saveBooks()
 }
 
@@ -68,6 +66,7 @@ function getStats() {
 
 // private func ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 function _createBooks() {
     gBooks = loadFromStorage(STORAGE_KEY)
     if (!gBooks || gBooks.length === 0) {
@@ -82,7 +81,6 @@ function _createBooks() {
 
 function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
     const rate = getRandomInt(1, 5)
-    console.log('rate:', rate)
     return {
         id: makeId(),
         title,

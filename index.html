@@ -17,7 +17,6 @@
 
             <div class="search-by">
                 <input oninput="onBookFilter()" type="search" placeholder="Search.." class="search">
-                <!-- <button onclick="onClearFilter()">X</button> -->
 
                 <select class="rating" onchange="onBookFilter()">
                     <option value="">Select book rate</option>
@@ -27,6 +26,7 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+                <button class="clear-btn" onclick="onClearFilter()">Clear</button>
             </div>
 
             <div class="sortBy" onchange="onSetSortBy()">
@@ -37,21 +37,20 @@
                     <option value="rating">Rating</option>
                 </select>
 
-                <label>
-                    <span>Descending</span>
-                    <input class="sort-desc" type="checkbox" oninput="onSetSortBy()">
-                </label>
-                <label>
-                    <span>Ascending</span>
-                    <input class="sort-asce" type="checkbox" oninput="onSetSortBy()">
-                </label>
+                <div class="sort-dir">
+                    <input class="sort-desc" type="radio" name="sort_dir" value="1" checked>
+                    <label for="descending">Descending</label>
+                    <input class="sort-asce" type="radio" name="sort_dir" value="-1">
+                    <label for="ascending">Ascending</label>
+                </div>
+
             </div>
 
         </fieldset>
     </section>
 
     <div class="alert-msg"></div>
-    <button class="addBook" onclick="onAddBook()">Add book <img class="logo" src="/pic/addBook.jpg.png"></button>
+    <button class="addBook" onclick="onShowAddBook()">Add book<img class="logo" src="/pic/addBook.jpg.png"></button>
     <table class="books-container">
         <thead>
             <tr>
@@ -72,6 +71,19 @@
                 <img src="" alt="">
             </div>
             <button class="close-details">X</button>
+        </form>
+    </dialog>
+
+    <dialog class="book-edit">
+        <form onsubmit="onAddBook()" method="dialog">
+            <h2>Add book</h2>
+            <input type="text" placeholder="Insert Book Name:" class="new-name">
+            <input type="number" placeholder="Add Price:" class="new-price">
+            <div>
+                <img src="" alt="">
+            </div>
+            <button>Submit!</button>
+            <button onclick="onCloseModal()" class="close-details">X</button>
         </form>
     </dialog>
 

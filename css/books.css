@@ -44,6 +44,10 @@ fieldset {
     font-size: 17px;
 }
 
+.sortBy {
+    display: flex;
+    flex-direction: row;
+}
 
 table {
     align-self: center;
@@ -128,8 +132,8 @@ td button:nth-of-type(3) {
 .book-details {
     position: relative;
     border-radius: 10px;
-    width: 40vw;
-    height: 50vh;
+    width: 30vw;
+    height: 30vh;
 }
 
 .book-details pre {
@@ -145,6 +149,11 @@ dialog form {
     flex-direction: column;
     font-size: 20px;
     margin: 0 auto;
+}
+
+.book-edit {
+    width: 45vw;
+    height: 30vh;
 }
 
 .bookPic {
@@ -170,6 +179,7 @@ dialog form {
 }
 
 .alert-msg {
+    position: relative;
     align-self: center;
     width: fit-content;
 
@@ -180,11 +190,13 @@ dialog form {
 }
 
 .success-msg {
+    position: relative;
     color: #270;
     background-color: #d8f0af;
 }
 
 .warning-msg {
+    position: relative;
     color: #9F6000;
     background-color: #FEEFB3;
 }
