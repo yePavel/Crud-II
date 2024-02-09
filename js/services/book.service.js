@@ -15,7 +15,7 @@ function getBooks(options = {}) {
         books.sort((book1, book2) => (book1.price - book2.price) * options.sortBy.price)
     }
     else if (options.sortBy.rating) {
-        books.sort((book1, book2) => (book1.rate - book2.rate) * options.sortBy.rating)
+        books.sort((book1, book2) => (book1.rate.rate - book2.rate.rate) * options.sortBy.rating)
     }
 
     if (options.page) {
@@ -79,14 +79,26 @@ function _createBooks() {
     }
 }
 
-function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
+function _covertRateToStar() {
     const rate = getRandomInt(1, 5)
+    var stars = ''
+    var i = 0
+    while (i < rate) {
+        stars += '⭐'
+        i++
+    }
+    return { rate, stars }
+}
+
+function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
+    const rate = _covertRateToStar()
+    console.log('starsRate:', rate)
     return {
         id: makeId(),
         title,
         price,
         imgUrl,
-        rate,
+        rate: rate
     }
 }
 

@@ -17,7 +17,7 @@ function render() {
     const strHtmls = books.map(book =>
         `<tr>
             <td>${book.title}</td>
-            <td>${book.rate}</td>
+            <td>${book.rate.stars}</td>
             <td class="price">${book.price}</td>
             <td class="btn-container">
                 <button onclick="onBookDetails('${book.id}')">Details <img class="logo" src="/pic/info.png"></button>
@@ -55,7 +55,6 @@ function onShowAddBook() {
 function onAddBook() {
     const elName = document.querySelector('.new-name')
     const elPrice = document.querySelector('.new-price')
-    const elModal = document.querySelector('.book-edit')
 
     if (!elName.value || !elPrice.value) return
     addBook(elName.value, elPrice.value)
@@ -162,4 +161,10 @@ function onPrevPage() {
         gQueryOptions.page.idx = lastPage
     else gQueryOptions.page.idx--
     render()
+}
+
+function convertRateToStars(bookId) {
+
+
+
 }
