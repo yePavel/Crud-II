@@ -7,6 +7,7 @@ const gQueryOptions = {
 }
 
 function onInit() {
+    readQueryParams()
     render()
 }
 
@@ -88,6 +89,7 @@ function onBookFilter() {
     gQueryOptions.filterBy.txt = input.value
     gQueryOptions.filterBy.minRate = elSortByRate.value
 
+    setQueryParams()
     render()
 }
 
@@ -99,6 +101,7 @@ function onSetSortBy() {
     gQueryOptions.sortBy = { [sortByCategory]: elDir.value }
     gQueryOptions.page.idx = 0
 
+    setQueryParams()
     render()
 }
 
@@ -150,6 +153,8 @@ function onNextPage() {
     if (bookCount > (gQueryOptions.page.idx + 1) * gQueryOptions.page.size)
         gQueryOptions.page.idx++
     else gQueryOptions.page.idx = 0
+
+    setQueryParams()
     render()
 }
 
@@ -160,11 +165,70 @@ function onPrevPage() {
     if (gQueryOptions.page.idx === 0)
         gQueryOptions.page.idx = lastPage
     else gQueryOptions.page.idx--
+
+    setQueryParams()
     render()
 }
 
-function convertRateToStars(bookId) {
+// QueryParams
 
+function readQueryParams() {
+    const queryParams = new URLSearchParams(window.location.search)
 
+    gQueryOptions.filterBy = {
+        txt: queryParams.get('txt') || '',
+        minRate: queryParams.get('minRate') || ''
+    }
 
+    if (queryParams.get('sortBy')) {
+        const prop = queryParams.get('sortBy') || ''
+        console.log('prop:', prop)
+        const dir = +queryParams.get('sortDir')
+        gQueryOptions.sortBy[prop] = dir
+    }
+
+    if (queryParams.get('pageIdx')) {
+        gQueryOptions.page.idx = +queryParams.get('pageIdx')
+        gQueryOptions.page.size = +queryParams.get('pageSize')
+    }
+    renderQueryParams()
+
+}
+
+function renderQueryParams() {
+    document.querySelector('.books-filter .search').value = gQueryOptions.filterBy.txt
+    document.querySelector('.books-filter select').value = gQueryOptions.filterBy.minRate
+
+    const sortKeys = Object.keys(gQueryOptions.sortBy)
+    const sortBy = sortKeys[0]
+    const dir = +gQueryOptions.sortBy[sortKeys[0]]
+
+    document.querySelector('.sortBy .sort').value = sortBy
+    document.querySelector('.sort-dir input').checked = (dir === -1) ? true : false
+
+}
+
+function setQueryParams() {
+    const queryParams = new URLSearchParams()
+
+    queryParams.set('txt', gQueryOptions.filterBy.txt)
+    queryParams.set('minRate', gQueryOptions.filterBy.minRate)
+
+    const sortKeys = Object.keys(gQueryOptions.sortBy)
+    if (sortKeys.length) {
+        queryParams.set('sortBy', sortKeys[0])
+        queryParams.set('sortDir', gQueryOptions.sortBy[sortKeys[0]])
+    }
+
+    if (gQueryOptions.page) {
+        queryParams.set('pageIdx', gQueryOptions.page.idx)
+        queryParams.set('pageSize', gQueryOptions.page.size)
+    }
+
+    const newUrl =
+        window.location.protocol + "//" +
+        window.location.host +
+        window.location.pathname + '?' + queryParams.toString()
+
+    window.history.pushState({ path: newUrl }, '', newUrl)
 }

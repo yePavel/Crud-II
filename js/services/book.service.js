@@ -92,7 +92,6 @@ function _covertRateToStar() {
 
 function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
     const rate = _covertRateToStar()
-    console.log('starsRate:', rate)
     return {
         id: makeId(),
         title,
@@ -108,7 +107,7 @@ function _saveBooks() {
 
 function _searchBooks(filterBy) {
     const filterdBooks = gBooks.filter(book => book.title.toLowerCase().includes(filterBy.txt.toLowerCase()) &&
-        book.rate >= filterBy.minRate)
+        book.rate.rate >= filterBy.minRate)
 
     return filterdBooks
 }
