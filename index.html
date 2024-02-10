@@ -50,7 +50,7 @@
     </section>
 
     <div class="alert-msg"></div>
-    <button class="addBook" onclick="onShowAddBook()">Add book<img class="logo" src="/pic/addBook.jpg.png"></button>
+    <button class="addBook" onclick="onAddBook()">Add book<img class="logo" src="/pic/addBook.jpg.png"></button>
     <table class="books-container">
         <thead>
             <tr>
@@ -70,12 +70,12 @@
             <div>
                 <img src="" alt="">
             </div>
-            <button class="close-details">X</button>
+            <button onclick="onCloseModal()" class="close-details">X</button>
         </form>
     </dialog>
 
     <dialog class="book-edit">
-        <form onsubmit="onAddBook()" method="dialog">
+        <form onsubmit="onSaveBook()" method="dialog">
             <h2>Add book</h2>
             <input type="text" placeholder="Insert Book Name:" class="new-name">
             <input type="number" placeholder="Add Price:" class="new-price">
@@ -89,8 +89,8 @@
 
     <section>
         <div class="actions">
-            <button onclick="onPrevPage()">Previous Page</button>
-            <button onclick="onNextPage()">Next Page</button>
+            <img class="prePage" src="/pic/prePage.png" onclick="onPrevPage()">
+            <img class="nextPage" src="/pic/nextPage.png" onclick="onNextPage()">
         </div>
     </section>
 

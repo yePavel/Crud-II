@@ -34,16 +34,22 @@ function removeBook(bookId) {
     _saveBooks()
 }
 
-function updatePrice(bookId, price) {
+function updatePrice(bookId, name, price) {
     const book = gBooks.find(book => book.id === bookId)
-    book.price = price
 
+    book.name = name
+    book.price = price
     _saveBooks()
+
+    return book
 }
 
 function addBook(name, price) {
-    gBooks.unshift(_createBook(name, price))
+    if (!name || !price) return
+    const book = _createBook(name, price)
+    gBooks.unshift(book)
     _saveBooks()
+    return book
 }
 
 function getBookById(bookId) {
@@ -65,7 +71,6 @@ function getStats() {
 }
 
 // private func ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 function _createBooks() {
     gBooks = loadFromStorage(STORAGE_KEY)
@@ -97,8 +102,21 @@ function _createBook(title, price = 99, imgUrl = 'emptyBook.jpg') {
         title,
         price,
         imgUrl,
-        rate: rate
+        rate: rate,
+        description: _loremStr()
     }
+}
+
+function _loremStr() {
+    const str = ['Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit.',
+        'Voluptatum,', 'illo,', 'at', 'incidunt', 'veniam', 'dolore', 'blanditiis']
+    var i = 0
+    var getStr = ''
+    while (i < 5) {
+        getStr += str[getRandomInt(1, 15)] + ' '
+        i++
+    }
+    return getStr
 }
 
 function _saveBooks() {

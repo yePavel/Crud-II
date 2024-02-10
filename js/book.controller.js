@@ -6,6 +6,9 @@ const gQueryOptions = {
     page: { idx: 0, size: 5 }
 }
 
+var gIsDetailsShown = 0
+var gBookToEdit = false
+
 function onInit() {
     readQueryParams()
     render()
@@ -29,6 +32,7 @@ function render() {
     )
     if (books.length === 0) elBooksTable.innerHTML = emptyTable
     else elBooksTable.innerHTML = strHtmls.join('')
+
     renderStats()
 }
 
@@ -38,32 +42,40 @@ function onRemoveBook(bookId) {
     render()
 }
 
-function onUpdateBook(bookId) {
-    const price = +prompt('Enter your new book price: ')
-    if (!price) return
+function onSaveBook() {
+    const elForm = document.querySelector('.book-edit form')
+    const elBook = elForm.querySelector('.new-name')
+    const elPrice = elForm.querySelector('.new-price')
 
-    updatePrice(bookId, price)
+    var bookName = elBook.value
+    var bookPrice = elPrice.value
 
-    userMsg('The book price has been updated', 'add')
+    if (gBookToEdit) {
+        var book = updatePrice(gBookToEdit.id, bookName, bookPrice)
+        gBookToEdit = null
+    }
+    else {
+        var book = addBook(bookName, bookPrice)
+    }
+    elForm.reset()
     render()
 }
 
-function onShowAddBook() {
+function onUpdateBook(bookId) {
+    gBookToEdit = getBookById(bookId)
     const elModal = document.querySelector('.book-edit')
+    elModal.querySelector('h2').innerText = 'Update Book'
+
+    elModal.querySelector('.new-name').value = gBookToEdit.title
+    elModal.querySelector('.new-price').value = gBookToEdit.price
+
     elModal.showModal()
 }
 
 function onAddBook() {
-    const elName = document.querySelector('.new-name')
-    const elPrice = document.querySelector('.new-price')
-
-    if (!elName.value || !elPrice.value) return
-    addBook(elName.value, elPrice.value)
-
-    elName.value = ''
-    elPrice.value = ''
-
-    render()
+    const elModal = document.querySelector('.book-edit')
+    elModal.querySelector('h2').innerText = 'Add Book'
+    elModal.showModal()
 }
 
 function onBookDetails(bookId) {
@@ -74,13 +86,17 @@ function onBookDetails(bookId) {
     const elImg = elModal.querySelector('div img')
     const elTitle = elModal.querySelector('h2 span')
 
-    pre.innerHTML = JSON.stringify(book, null, 4)
-    elTitle.innerText = book.title
+    pre.innerHTML = `    Book Price: ${book.price} 
+    Book Rating: ${book.rate.stars}
+    Description: ${book.description}`
 
+    elTitle.innerText = book.title
     elImg.src = `pic/${book.title}.jpg`
 
     elModal.showModal()
+    gIsDetailsShown = 1
 }
+
 
 function onBookFilter() {
     const input = document.querySelector('fieldset input')
@@ -117,6 +133,9 @@ function onClearFilter() {
 
 function onCloseModal() {
     document.querySelector('.book-edit').close()
+    document.querySelector('.book-details').close()
+
+    gIsDetailsShown = 0
 }
 
 function userMsg(msg, mode) {
@@ -161,13 +180,25 @@ function onNextPage() {
 function onPrevPage() {
     const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
     const lastPage = Math.ceil(bookCount) - 1
-
+    console.log('lastPage:', lastPage)
     if (gQueryOptions.page.idx === 0)
         gQueryOptions.page.idx = lastPage
     else gQueryOptions.page.idx--
 
     setQueryParams()
     render()
+}
+
+function addPagesBtn() {
+    const elPages = document.querySelector('.actions .pages')
+    const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
+    const lastPage = Math.ceil(bookCount)
+    console.log('lastPage:', lastPage)
+    var i = 0
+    while (i < lastPage) {
+        elPages.innerHTML += `${i}Page`
+        i++
+    }
 }
 
 // QueryParams
@@ -182,7 +213,6 @@ function readQueryParams() {
 
     if (queryParams.get('sortBy')) {
         const prop = queryParams.get('sortBy') || ''
-        console.log('prop:', prop)
         const dir = +queryParams.get('sortDir')
         gQueryOptions.sortBy[prop] = dir
     }
@@ -191,8 +221,10 @@ function readQueryParams() {
         gQueryOptions.page.idx = +queryParams.get('pageIdx')
         gQueryOptions.page.size = +queryParams.get('pageSize')
     }
-    renderQueryParams()
 
+    gIsDetailsShown = +queryParams.get('bookDetails')
+
+    renderQueryParams()
 }
 
 function renderQueryParams() {
@@ -200,11 +232,12 @@ function renderQueryParams() {
     document.querySelector('.books-filter select').value = gQueryOptions.filterBy.minRate
 
     const sortKeys = Object.keys(gQueryOptions.sortBy)
-    const sortBy = sortKeys[0]
+    const sortBy = sortKeys[0] || ''
     const dir = +gQueryOptions.sortBy[sortKeys[0]]
 
     document.querySelector('.sortBy .sort').value = sortBy
     document.querySelector('.sort-dir input').checked = (dir === -1) ? true : false
+    if (gIsDetailsShown === 1) document.querySelector('.book-details').showModal()
 
 }
 
@@ -224,6 +257,7 @@ function setQueryParams() {
         queryParams.set('pageIdx', gQueryOptions.page.idx)
         queryParams.set('pageSize', gQueryOptions.page.size)
     }
+    queryParams.set('bookDetails', gIsDetailsShown)
 
     const newUrl =
         window.location.protocol + "//" +
