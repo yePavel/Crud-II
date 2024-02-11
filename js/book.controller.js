@@ -30,7 +30,7 @@ function render() {
                 <button data-trans="book-delete" onclick="onRemoveBook('${book.id}')">Delete <img class="logo" src="/pic/trash.png"></button>
             </td>
         </tr>`
-    )
+    ) 
     if (books.length === 0) elBooksTable.innerHTML = emptyTable
     else elBooksTable.innerHTML = strHtmls.join('')
 
@@ -38,6 +38,7 @@ function render() {
 }
 
 function onRemoveBook(bookId) {
+    if (!confirm('Are you sure you want to delete this book?')) return
     removeBook(bookId)
     userMsg('The book has been removed', 'remove')
     render()
@@ -76,17 +77,17 @@ function onUpdateBook(bookId) {
 function onAddBook() {
     const elModal = document.querySelector('.book-edit')
     elModal.querySelector('h2').innerText = 'Add Book'
-    elModal.querySelector('.book-edit-btn').innerHTML = `<button onclick="onUpdateBook()">Edit Book</button>`
+    userMsg('The book has added', 'add')
     elModal.showModal()
 }
 
 function onBookDetails(bookId) {
     const book = getBookById(bookId)
-    console.log('book:', book)
     const elModal = document.querySelector('.book-details')
     const pre = elModal.querySelector('pre')
     const elImg = elModal.querySelector('div img')
     const elTitle = elModal.querySelector('h2 span')
+    elModal.querySelector('.book-edit-btn').innerHTML = `<button onclick="onUpdateBook('${book.id}')">Edit Book</button>`
 
     pre.innerHTML = `    Book Price: ${book.price} 
     Book Rating: ${book.rate.stars}
@@ -154,6 +155,7 @@ function userMsg(msg, mode) {
         elMsg.classList.remove('success-msg')
         elMsg.classList.add('warning-msg')
     }
+
     setTimeout(() => elMsg.classList.add('hidden'), 2000)
 }
 
