@@ -6,7 +6,7 @@ const gQueryOptions = {
     page: { idx: 0, size: 5 }
 }
 
-var gIsDetailsShown = 0
+var gChosenBookId = null
 var gBookToEdit = false
 
 function onInit() {
@@ -24,9 +24,9 @@ function render() {
             <td>${book.rate.stars}</td>
             <td class="price">${book.price}</td>
             <td class="btn-container">
-                <button onclick="onBookDetails('${book.id}')">Details <img class="logo" src="/pic/info.png"></button>
-                <button onclick="onUpdateBook('${book.id}')">Update <img class="logo" src="/pic/price.png"></button>
-                <button onclick="onRemoveBook('${book.id}')">Delete <img class="logo" src="/pic/trash.png"></button>
+                <button data-trans="book-details" onclick="onBookDetails('${book.id}')">Details <img class="logo" src="/pic/info.png"></button>
+                <button data-trans="book-update" onclick="onUpdateBook('${book.id}')">Update <img class="logo" src="/pic/price.png"></button>
+                <button data-trans="book-delete" onclick="onRemoveBook('${book.id}')">Delete <img class="logo" src="/pic/trash.png"></button>
             </td>
         </tr>`
     )
@@ -75,6 +75,7 @@ function onUpdateBook(bookId) {
 function onAddBook() {
     const elModal = document.querySelector('.book-edit')
     elModal.querySelector('h2').innerText = 'Add Book'
+    elModal.querySelector('.book-edit-btn').innerHTML = `<button onclick="onUpdateBook()">Edit Book</button>`
     elModal.showModal()
 }
 
@@ -94,7 +95,7 @@ function onBookDetails(bookId) {
     elImg.src = `pic/${book.title}.jpg`
 
     elModal.showModal()
-    gIsDetailsShown = 1
+    gChosenBookId = bookId
 }
 
 
@@ -135,7 +136,7 @@ function onCloseModal() {
     document.querySelector('.book-edit').close()
     document.querySelector('.book-details').close()
 
-    gIsDetailsShown = 0
+    gChosenBookId = 0
 }
 
 function userMsg(msg, mode) {
@@ -189,16 +190,25 @@ function onPrevPage() {
     render()
 }
 
-function addPagesBtn() {
-    const elPages = document.querySelector('.actions .pages')
-    const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
-    const lastPage = Math.ceil(bookCount)
-    console.log('lastPage:', lastPage)
-    var i = 0
-    while (i < lastPage) {
-        elPages.innerHTML += `${i}Page`
-        i++
-    }
+// function addPagesBtn() {
+//     const elPages = document.querySelector('.actions .pages')
+//     const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
+//     const lastPage = Math.ceil(bookCount)
+//     console.log('lastPage:', lastPage)
+//     var i = 0
+//     while (i < lastPage) {
+//         elPages.innerHTML += `${i}Page`
+//         i++
+//     }
+// }
+
+function onSetLang(lang) {
+    setLang(lang)
+    // if lang is hebrew add RTL class to document.body
+    if (lang === 'he') document.body.classList.add('rtl')
+    else document.body.classList.remove('rtl')
+    render()
+    doTrans()
 }
 
 // QueryParams
@@ -222,7 +232,7 @@ function readQueryParams() {
         gQueryOptions.page.size = +queryParams.get('pageSize')
     }
 
-    gIsDetailsShown = +queryParams.get('bookDetails')
+    gChosenBookId = queryParams.get('bookDetails')
 
     renderQueryParams()
 }
@@ -236,8 +246,11 @@ function renderQueryParams() {
     const dir = +gQueryOptions.sortBy[sortKeys[0]]
 
     document.querySelector('.sortBy .sort').value = sortBy
-    document.querySelector('.sort-dir input').checked = (dir === -1) ? true : false
-    if (gIsDetailsShown === 1) document.querySelector('.book-details').showModal()
+
+    // if (dir === 1) {
+    //     document.querySelector('.sort-asce').checked = true
+    // } else document.querySelector('.sort-desc').checked = true
+    // if (gChosenBookId) onBookDetails(gChosenBookId)
 
 }
 
@@ -257,7 +270,7 @@ function setQueryParams() {
         queryParams.set('pageIdx', gQueryOptions.page.idx)
         queryParams.set('pageSize', gQueryOptions.page.size)
     }
-    queryParams.set('bookDetails', gIsDetailsShown)
+    queryParams.set('bookDetails', gChosenBookId)
 
     const newUrl =
         window.location.protocol + "//" +

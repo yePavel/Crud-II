@@ -9,29 +9,37 @@
 </head>
 
 <body onload="onInit()">
-    <h1>Books Shop📖</h1>
+    <h1 data-trans="title">Books Shop📖</h1>
+
+    <div class="trans">
+        <select onchange="onSetLang(this.value)">
+            <option value="en">English</option>
+            <option value="he">עברית</option>
+        </select>
+    </div>
 
     <section class="books-filter">
         <fieldset>
-            <legend>Filter & Sorting</legend>
+            <legend data-trans="filter-sort">Filter & Sorting</legend>
 
             <div class="search-by">
-                <input oninput="onBookFilter()" type="search" placeholder="Search.." class="search">
+                <input data-trans="search-placeholder" oninput="onBookFilter()" type="search" placeholder="Search.."
+                    class="search">
 
                 <select class="rating" onchange="onBookFilter()">
-                    <option value="">Select book rate</option>
+                    <option data-trans="filter-rate" value="">Select book rate</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
-                <button class="clear-btn" onclick="onClearFilter()">Clear</button>
+                <button data-trans="clear-search" class="clear-btn" onclick="onClearFilter()">Clear</button>
             </div>
 
             <div class="sortBy" onchange="onSetSortBy()">
                 <select class="sort">
-                    <option value="">Select sort filter</option>
+                    <option data-trans="sort-filter-by" value="">Select sort filter</option>
                     <option value="title">Title</option>
                     <option value="price">Price</option>
                     <option value="rating">Rating</option>
@@ -39,9 +47,9 @@
 
                 <div class="sort-dir">
                     <input class="sort-desc" type="radio" name="sort_dir" value="-1" checked>
-                    <label for="descending">Descending</label>
+                    <label data-trans="desc-sort" for="descending">Descending</label>
                     <input class="sort-asce" type="radio" name="sort_dir" value="1">
-                    <label for="ascending">Ascending</label>
+                    <label data-trans="asce-sort" for="ascending">Ascending</label>
                 </div>
 
             </div>
@@ -50,14 +58,15 @@
     </section>
 
     <div class="alert-msg"></div>
-    <button class="addBook" onclick="onAddBook()">Add book<img class="logo" src="/pic/addBook.jpg.png"></button>
+    <button data-trans="add-book" class="addBook" onclick="onAddBook()">Add book<img class="logo"
+            src="/pic/addBook.jpg.png"></button>
     <table class="books-container">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Rating</th>
-                <th>Price</th>
-                <th>Actions</th>
+                <th data-trans="book-title">Title</th>
+                <th data-trans="book-rate">Rating</th>
+                <th data-trans="book-price">Price</th>
+                <th data-trans="book-actions">Actions</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -82,6 +91,9 @@
             <div>
                 <img src="" alt="">
             </div>
+            <div class="book-edit-btn">
+
+            </div>
             <button>Submit!</button>
             <button onclick="onCloseModal()" class="close-details">X</button>
         </form>
@@ -95,17 +107,18 @@
     </section>
 
     <footer>
-        <span>Total books:</span>
+        <span data-trans="footer-total">Total books:</span>
         <span class="total-books"></span>
-        <span>Expensive books:</span>
+        <span data-trans="footer-expen">Expensive books:</span>
         <span class="expensive-books"></span>
-        <span>Cheap books:</span>
+        <span data-trans="footer-cheap">Cheap books:</span>
         <span class="cheap-books"></span>
-        <span>Average:</span>
+        <span data-trans="footer-avg">Average:</span>
         <span class="avg-books"></span>
     </footer>
 
     <script src="js/services/util.service.js"></script>
+    <script src="js/services/i18n.service.js"></script>
     <script src="js/services/storage.service.js"></script>
     <script src="js/services/book.service.js"></script>
     <script src="js/book.controller.js"></script>
