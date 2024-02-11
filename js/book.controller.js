@@ -76,17 +76,17 @@ function onUpdateBook(bookId) {
 function onAddBook() {
     const elModal = document.querySelector('.book-edit')
     elModal.querySelector('h2').innerText = 'Add Book'
-    elModal.querySelector('.book-edit-btn').innerHTML = `<button onclick="onUpdateBook()">Edit Book</button>`
+    userMsg('The book has added', 'add')
     elModal.showModal()
 }
 
 function onBookDetails(bookId) {
     const book = getBookById(bookId)
-    console.log('book:', book)
     const elModal = document.querySelector('.book-details')
     const pre = elModal.querySelector('pre')
     const elImg = elModal.querySelector('div img')
     const elTitle = elModal.querySelector('h2 span')
+    elModal.querySelector('.book-edit-btn').innerHTML = `<button onclick="onUpdateBook('${book.id}')">Edit Book</button>`
 
     pre.innerHTML = `    Book Price: ${book.price} 
     Book Rating: ${book.rate.stars}
@@ -154,6 +154,7 @@ function userMsg(msg, mode) {
         elMsg.classList.remove('success-msg')
         elMsg.classList.add('warning-msg')
     }
+
     setTimeout(() => elMsg.classList.add('hidden'), 2000)
 }
 

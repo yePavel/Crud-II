@@ -148,6 +148,11 @@ td button:nth-of-type(3) {
     width: 60%;
 }
 
+.book-edit-btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 dialog form {
     display: flex;
     flex-direction: column;
