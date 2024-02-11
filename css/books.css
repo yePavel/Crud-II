@@ -21,10 +21,6 @@ body.rtl {
     direction: rtl;
 }
 
-body.rtl .btn-delete {
-    float: left;
-}
-
 form {
     display: flex;
     flex-direction: row;

@@ -6,12 +6,13 @@ const gQueryOptions = {
     page: { idx: 0, size: 5 }
 }
 
-var gChosenBookId = null
+var gChosenBookId = ''
 var gBookToEdit = false
 
 function onInit() {
     readQueryParams()
     render()
+    doTrans()
 }
 
 function render() {
@@ -81,7 +82,7 @@ function onAddBook() {
 
 function onBookDetails(bookId) {
     const book = getBookById(bookId)
-
+    console.log('book:', book)
     const elModal = document.querySelector('.book-details')
     const pre = elModal.querySelector('pre')
     const elImg = elModal.querySelector('div img')
@@ -96,6 +97,7 @@ function onBookDetails(bookId) {
 
     elModal.showModal()
     gChosenBookId = bookId
+    setQueryParams()
 }
 
 
@@ -181,7 +183,6 @@ function onNextPage() {
 function onPrevPage() {
     const bookCount = _getBooksCount(gQueryOptions.filterBy) / gQueryOptions.page.size
     const lastPage = Math.ceil(bookCount) - 1
-    console.log('lastPage:', lastPage)
     if (gQueryOptions.page.idx === 0)
         gQueryOptions.page.idx = lastPage
     else gQueryOptions.page.idx--
@@ -205,10 +206,19 @@ function onPrevPage() {
 function onSetLang(lang) {
     setLang(lang)
     // if lang is hebrew add RTL class to document.body
-    if (lang === 'he') document.body.classList.add('rtl')
-    else document.body.classList.remove('rtl')
+    if (lang === 'he') {
+        document.body.classList.add('rtl')
+        document.querySelector('.actions').innerHTML = `<img class="nextPage" src="/pic/nextPage.png" onclick="onNextPage()">
+        <img class="prePage" src="/pic/prePage.png" onclick="onPrevPage()">`
+    }
+    else {
+        document.body.classList.remove('rtl')
+        document.querySelector('.actions').innerHTML = `<img class="prePage" src="/pic/prePage.png" onclick="onPrevPage()">
+        <img class="nextPage" src="/pic/nextPage.png" onclick="onNextPage()">`
+    }
     render()
     doTrans()
+    setQueryParams()
 }
 
 // QueryParams
@@ -231,8 +241,8 @@ function readQueryParams() {
         gQueryOptions.page.idx = +queryParams.get('pageIdx')
         gQueryOptions.page.size = +queryParams.get('pageSize')
     }
-
     gChosenBookId = queryParams.get('bookDetails')
+    gCurrLang = queryParams.get('lang')
 
     renderQueryParams()
 }
@@ -247,10 +257,14 @@ function renderQueryParams() {
 
     document.querySelector('.sortBy .sort').value = sortBy
 
-    // if (dir === 1) {
-    //     document.querySelector('.sort-asce').checked = true
-    // } else document.querySelector('.sort-desc').checked = true
-    // if (gChosenBookId) onBookDetails(gChosenBookId)
+    if (dir === 1) {
+        document.querySelector('.sort-asce').checked = true
+    } else document.querySelector('.sort-desc').checked = true
+    if (gChosenBookId) onBookDetails(gChosenBookId)
+    if (gCurrLang) {
+        onSetLang(gCurrLang)
+        document.querySelector('.trans select').value = gCurrLang
+    }
 
 }
 
@@ -270,7 +284,8 @@ function setQueryParams() {
         queryParams.set('pageIdx', gQueryOptions.page.idx)
         queryParams.set('pageSize', gQueryOptions.page.size)
     }
-    queryParams.set('bookDetails', gChosenBookId)
+    if (gChosenBookId) queryParams.set('bookDetails', gChosenBookId)
+    queryParams.set('lang', gCurrLang)
 
     const newUrl =
         window.location.protocol + "//" +

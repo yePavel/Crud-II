@@ -67,19 +67,19 @@ const gTrans = {
     },
     'footer-total': {
         en: 'Total Books:',
-        he: 'סה"כ ספרים'
+        he: 'סה"כ ספרים:'
     },
     'footer-expen': {
         en: 'Expensive books:',
-        he: 'ספרים יקרים'
+        he: 'ספרים יקרים:'
     },
     'footer-cheap': {
         en: 'Cheap books:',
-        he: 'ספרים זולים'
+        he: 'ספרים זולים:'
     },
     'footer-avg': {
         en: 'Average:',
-        he: 'ספרים בטווח מחירים ממוצע'
+        he: 'ספרים בטווח מחירים ממוצע:'
     }
 }
 
@@ -101,11 +101,8 @@ function doTrans() {
     // get the data-trans and use getTrans to replace the innerText
     const els = document.querySelectorAll('[data-trans]')
     els.forEach(el => {
-        // console.log('el:', el)
         const transKey = el.dataset.trans
-        console.log('transKey:', transKey)
         const transTxt = getTrans(transKey)
-        console.log('transTxt:', transTxt)
         // support placeholder 
         if (el.placeholder) el.placeholder = transTxt
         else el.innerText = transTxt
